@@ -17,18 +17,62 @@ import Task from '../Task/Task';
     }) 
 */
 
+
 const ToDo = () => {
 
+    // Manejo de Tareas
     const [tasks, setTasks] = useState([]);
-    const [form, setForm] = useState({
-        formTask: "",
+
+    const createNewTask = (title) => ({
+        id: window.crypto.randomUUID(),
+        title: title,
+        completed: false,
     });
 
-    // Form Controlado
+    const deleteTask = (id) => (
+       tasks.filter((task) => {
+            return task.id !== id
+       }));
+   
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const newTask = createNewTask(form.title);
+        setTasks([...tasks, newTask]);
+        resetForm();
+    }
+
+    const handleDelete = (id) => {
+        const newTasks = deleteTask(id);
+        setTasks(newTasks);
+    }
+
+    const handleEdit = (id) => {
+        console.log("llegue al handle edit", id)
+        const editTitle = tasks.find((task)=>{
+            return task.id === id
+        });
+        console.log(editTitle);
+        //const newTasks = deleteTask(id);
+        //setTasks([...]);
+    }
+
+    // Manejo del Form
+    const [form, setForm] = useState({
+        title: "",
+    });
+
+    const resetForm = () => {
+        setForm({
+            title: "",
+        });
+    }
+
     const handleChange = (e) => {
+        // Form Controlado
+        const {name, value} = e.target
         setForm({
             ...form,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
     }
 
@@ -41,17 +85,17 @@ const ToDo = () => {
     }
     */
 
-    const handleAdd = (e) => {
-        e.preventDefault();
-        setTasks([...tasks, form.formTask]);
-        setForm({
-            formTask: "",
-        });
-    }
 
   return (
     <div>
         <h1>To Do List</h1>
+
+        <section>
+            <form name="form" onSubmit={handleSubmit}>
+                <input type="text" name="title" id="formTitle" onChange={handleChange} value={form.title} />
+                <button type="submit">Add</button>
+            </form>
+        </section>
 
         <section>
             <h2>List</h2>
@@ -59,19 +103,18 @@ const ToDo = () => {
                 <ul>
                 {tasks.map((task) => {
                     return (
-                        <Task task={task} />
+                        <Task 
+                            key={task.id} 
+                            id={task.id} 
+                            title={task.title} 
+                            completed={task.completed} 
+                            handleDelete={handleDelete} 
+                            handleEdit={handleEdit} />
                     );
                 })}
                 </ul>
             </div>
 
-        </section>
-
-        <section>
-            <form name="form">
-                <input type="text" name="formTask" id="formTask" onChange={handleChange} value={form.formTask} />
-                <button onClick={handleAdd}>Add</button>
-            </form>
         </section>
     </div>
   )

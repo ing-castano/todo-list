@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Task = ({task}) => {
+const Task = ({id, title, completed, handleDelete, handleEdit}) => {
   return (
     <div
     style = {{
@@ -15,16 +15,16 @@ const Task = ({task}) => {
         listStyle: "none",
     }}
     >
-        <input type="checkbox" name="" id="" />
-        <li>{task}</li>
+        <input type="checkbox" name="checkbox" id="" />
+        <li>{title}</li>
         <div
             style={{
                 display: "flex",
                 flexDirection: "column",
             }}                    
         >
-            <button>Delete</button>
-            <button>Edit</button>
+            <button onClick={() => {handleDelete(id)}}>Delete</button>
+            <button onClick={() => {handleEdit(id)}}>Edit</button>
         </div>
     </div>
   )
