@@ -48,10 +48,11 @@ const ToDo = () => {
 
     const handleEdit = (id) => {
         console.log("llegue al handle edit", id)
-        const editTitle = tasks.find((task)=>{
+        const editTask = tasks.find((task)=>{
             return task.id === id
         });
-        console.log(editTitle);
+        
+        console.log(editTask);
         //const newTasks = deleteTask(id);
         //setTasks([...]);
     }
