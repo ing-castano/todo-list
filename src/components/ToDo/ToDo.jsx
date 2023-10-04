@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import Task from '../Task/Task';
+import Form from '../Form/Form';
 
 /* Comentarios Profe
 // estado = tareas[] -> deberiamos tener en un estado un array de tareas
@@ -29,17 +30,16 @@ const ToDo = () => {
         completed: false,
     });
 
+    const addTask = (form) => {
+        const newTask = createNewTask(form.title);
+        setTasks([...tasks, newTask]);
+    }
+
     const deleteTask = (id) => (
        tasks.filter((task) => {
             return task.id !== id
        }));
    
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const newTask = createNewTask(form.title);
-        setTasks([...tasks, newTask]);
-        resetForm();
-    }
 
     const handleDelete = (id) => {
         const newTasks = deleteTask(id);
@@ -57,46 +57,14 @@ const ToDo = () => {
         //setTasks([...]);
     }
 
-    // Manejo del Form
-    const [form, setForm] = useState({
-        title: "",
-    });
-
-    const resetForm = () => {
-        setForm({
-            title: "",
-        });
-    }
-
-    const handleChange = (e) => {
-        // Form Controlado
-        const {name, value} = e.target
-        setForm({
-            ...form,
-            [name]: value,
-        });
-    }
-
-    /* Opcion Form No Controlado
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = Object.fromEntries(new window.FormData(e.target));
-        console.log(formData);
-
-    }
-    */
-
-
+    
   return (
     <div>
         <h1>To Do List</h1>
 
-        <section>
-            <form name="form" onSubmit={handleSubmit}>
-                <input type="text" name="title" id="formTitle" onChange={handleChange} value={form.title} />
-                <button type="submit">Add</button>
-            </form>
-        </section>
+        <Form 
+            onSubmitted = {(form) => {addTask(form)}}
+        />
 
         <section>
             <h2>List</h2>
