@@ -35,18 +35,14 @@ const ToDo = () => {
         setTasks([...tasks, newTask]);
     }
 
-    const deleteTask = (id) => (
-       tasks.filter((task) => {
+    const deleteTask = (id) => {
+       const newTasks = tasks.filter((task) => {
             return task.id !== id
-       }));
+       });
+       setTasks(newTasks);
+    };
    
-
-    const handleDelete = (id) => {
-        const newTasks = deleteTask(id);
-        setTasks(newTasks);
-    }
-
-    const handleEdit = (id) => {
+    const editTask = (id) => {
         console.log("llegue al handle edit", id)
         const editTask = tasks.find((task)=>{
             return task.id === id
@@ -57,6 +53,13 @@ const ToDo = () => {
         //setTasks([...]);
     }
 
+    const completedTask = (id) => {
+        const draftTasks = structuredClone(tasks);
+        const draftTask = draftTasks.find((task) => task.id === id);
+        draftTask.completed = !draftTask.completed;
+        setTasks(draftTasks);    
+    }
+    
     
   return (
     <div>
@@ -76,9 +79,10 @@ const ToDo = () => {
                             key={task.id} 
                             id={task.id} 
                             title={task.title} 
-                            completed={task.completed} 
-                            handleDelete={handleDelete} 
-                            handleEdit={handleEdit} />
+                            completed={task.completed}
+                            onDeleted = {(id) => {deleteTask(id)}}
+                            completedTask = {completedTask}
+                            editTask={editTask} />
                     );
                 })}
                 </ul>
