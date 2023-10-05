@@ -28,6 +28,7 @@ const ToDo = () => {
         id: window.crypto.randomUUID(),
         title: title,
         completed: false,
+        edited: false,
     });
 
     const addTask = (form) => {
@@ -43,14 +44,18 @@ const ToDo = () => {
     };
    
     const editTask = (id) => {
-        console.log("llegue al handle edit", id)
-        const editTask = tasks.find((task)=>{
-            return task.id === id
-        });
-        
-        console.log(editTask);
-        //const newTasks = deleteTask(id);
-        //setTasks([...]);
+        const draftTasks = structuredClone(tasks);
+        const draftTask = draftTasks.find((task) => task.id === id);
+        draftTask.edited = true;
+        setTasks(draftTasks);  
+    }
+
+    const modifyTask = (id, text) => {
+        const draftTasks = structuredClone(tasks);
+        const draftTask = draftTasks.find((task) => task.id === id);
+        draftTask.edited = false;
+        draftTask.title = text;
+        setTasks(draftTasks);  
     }
 
     const completedTask = (id) => {
@@ -82,7 +87,9 @@ const ToDo = () => {
                             completed={task.completed}
                             onDeleted = {(id) => {deleteTask(id)}}
                             completedTask = {completedTask}
-                            editTask={editTask} />
+                            editTask={editTask}
+                            modifyTask={modifyTask}
+                            edited={task.edited} />
                     );
                 })}
                 </ul>
