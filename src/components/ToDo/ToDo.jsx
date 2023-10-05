@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import Task from '../Task/Task';
 import Form from '../Form/Form';
+import TaskList from '../TaskList/TaskList';
 
 /* Comentarios Profe
 // estado = tareas[] -> deberiamos tener en un estado un array de tareas
@@ -77,22 +78,22 @@ const ToDo = () => {
         <section>
             <h2>List</h2>
             <div>
-                <ul>
-                {tasks.map((task) => {
-                    return (
-                        <Task 
-                            key={task.id} 
-                            id={task.id} 
-                            title={task.title} 
-                            completed={task.completed}
-                            onDeleted = {(id) => {deleteTask(id)}}
-                            completedTask = {completedTask}
-                            editTask={editTask}
-                            modifyTask={modifyTask}
-                            edited={task.edited} />
-                    );
-                })}
-                </ul>
+                <TaskList // Ahora tengo un componente generico que lista cosas, en este caso tasks porque le estoy pasando esa info.
+                    items={tasks} // le paso tasks como prop
+                    renderItems = {(item) => { // RENDER PROPS -> es pasarle una funcion con el componente que quiero que renderize.
+                        return (  // item es el resultado de lo que estoy mapeando adentro del componenete <TaskList />, por programacion funcional, por ser del tipo (e) => {return e}
+                            <Task // aca le paso el componente Task porque quiero listar tareas. La ventaja de esto es como en el onDeleted, que no tengo que usar dependencias ni prop drilling, puesto que tengo el componente afuera y no adentro de <TasksList /> 
+                                key={item.id} 
+                                id={item.id} 
+                                title={item.title} 
+                                completed={item.completed}
+                                onDeleted = {(id) => {deleteTask(id)}}
+                                completedTask = {completedTask}
+                                editTask={editTask}
+                                modifyTask={modifyTask}
+                                edited={item.edited} />
+                        );
+                    }}/>
             </div>
 
         </section>
